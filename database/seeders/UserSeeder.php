@@ -33,5 +33,11 @@ class UserSeeder extends Seeder
             'email'    => 'edilberto@misena.edu.co',
             'password' => 'aprendizedilberto'
         ]);
+
+        User::create([
+            'name'     => 'Javier Andres Mendoza Cupa',
+            'email'    => 'jaamendozac@sena.edu.co',
+            'password' => '123456789'
+        ]);
     }
 }

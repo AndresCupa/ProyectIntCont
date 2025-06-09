@@ -1,117 +1,147 @@
-# Proyecto de Integración Continua
+# MobileSync - Proyecto de Integración Continua
 
-Este proyecto es parte de un trabajo universitario que implementa una aplicación web utilizando Laravel, Docker y Jenkins para demostrar prácticas de integración continua y despliegue automatizado.
+Este repositorio contiene el proyecto **MobileSync**, una aplicación Laravel desarrollada como parte del curso de Integración Continua en la Facultad de Ingeniería, Diseño e Innovación.
 
-## Requisitos Previos
+## Integrantes del Grupo 10
 
-Antes de comenzar, asegúrate de tener instalados los siguientes componentes en tu sistema:
+- **JAVIER ANDRÉS MENDOZA CUPA**
+- **JHONATAN ARTURO ELNATHAN CARREÑO PRIETO**
+- **LUIS ANGELO HERNANDEZ BLANCO**
+
+---
+
+## 📦 Requisitos del Sistema
+
+Asegúrate de tener instalado:
 
 - [Docker](https://www.docker.com/get-started)
 - [Docker Compose](https://docs.docker.com/compose/install/)
 - [Git](https://git-scm.com/downloads)
 - [Composer](https://getcomposer.org/download/) (para gestionar dependencias de PHP)
+- [Laravel 10 o superior](https://laravel.com/docs/12.x/installation)
+- [Jenkins](https://www.jenkins.io/download/) (opcional para CI/CD)
+- [Ngrok](https://ngrok.com/downloads) (para pruebas de webhook)
 
-## Clonar el Repositorio
+---
+
+## 🚀 Clonar el Repositorio
 
 ```bash
 git clone https://github.com/AndresCupa/ProyectoIntCont.git
 cd ProyectoIntCont
 ```
 
-## Configuración del Entorno
+---
 
-1. Copia el archivo de ejemplo `.env.example` y renómbralo a `.env`:
+## ⚙️ Configuración del Entorno
+
+1. Copia el archivo de entorno:
 
 ```bash
 cp .env.example .env
 ```
 
-2. Genera la clave de la aplicación Laravel:
+2. Genera la clave de la aplicación:
 
 ```bash
 php artisan key:generate
 ```
 
-## Construir y Levantar los Contenedores
+3. Verifica que los valores de conexión a la base de datos coincidan con tu contenedor MySQL.
 
-El proyecto incluye un archivo `docker-compose.yml` y dos Dockerfiles (`dockerfile.laravel` y `dockerfile.nginx`) para configurar los servicios necesarios.
+---
 
-1. Construye y levanta los contenedores:
+## 🐳 Despliegue con Docker
+
+1. Asegúrate de tener `docker-compose.yml` y los Dockerfile configurados correctamente.
+2. Construye e inicia los contenedores:
 
 ```bash
 docker-compose up -d --build
 ```
 
-Esto iniciará los siguientes servicios:
-
-- **Laravel App**: Contenedor que ejecuta la aplicación Laravel.
-- **Nginx**: Servidor web que sirve la aplicación.
-- **MySQL**: Base de datos para la aplicación.
-
-2. Verifica que los contenedores estén corriendo:
+3. Verifica que los servicios estén corriendo:
 
 ```bash
 docker ps
 ```
 
-## Instalar Dependencias
+---
 
-1. Accede al contenedor de la aplicación Laravel:
+## 🧪 Migraciones y Seeders
+
+1. Ingresa al contenedor de la app:
 
 ```bash
 docker exec -it laravel_app bash
 ```
 
-2. Dentro del contenedor, instala las dependencias de PHP:
-
-```bash
-composer install
-```
-
-## Migraciones y Seeders
-
-1. Ejecuta las migraciones para crear las tablas en la base de datos:
+2. Ejecuta las migraciones:
 
 ```bash
 php artisan migrate
 ```
 
-2. (Opcional) Ejecuta los seeders para poblar la base de datos con datos de prueba:
+3. (Opcional) Ejecuta los seeders:
 
 ```bash
 php artisan db:seed
 ```
 
-## Acceder a la Aplicación
+---
 
-Una vez que los contenedores estén en funcionamiento y las dependencias instaladas, puedes acceder a la aplicación en tu navegador web en:
+## 🔗 Acceso a la Aplicación
+
+Una vez levantados los contenedores, accede desde tu navegador a:
 
 ```
 http://localhost
 ```
 
-## Pruebas
+---
 
-Para ejecutar las pruebas automatizadas, utiliza el siguiente comando dentro del contenedor de la aplicación:
+## 🤖 Automatización con Jenkins
+
+Se ha implementado Jenkins en un contenedor Docker para automatizar las siguientes tareas:
+
+- Clonación del repositorio
+- Instalación de dependencias
+- Configuración del entorno Laravel
+- Ejecución de pruebas automatizadas
+
+> El pipeline se activa automáticamente mediante un webhook desde GitHub, utilizando **Ngrok** para exponer Jenkins localmente.
+
+Consulta el archivo [MANUAL_JENKINS.md](./MANUAL_JENKINS.md) para instrucciones completas.
+
+---
+
+## 🧪 Ejecutar Pruebas
+
+Dentro del contenedor Laravel:
 
 ```bash
 php artisan test
 ```
 
-## Desplegar con Jenkins
+---
 
-Este proyecto está preparado para integrarse con Jenkins para automatizar el proceso de integración continua. Asegúrate de tener Jenkins instalado y configurado en tu entorno. Puedes crear un pipeline en Jenkins que realice las siguientes tareas:
+## 🛠 Estructura del Proyecto
 
-1. Clonar el repositorio.
-2. Construir los contenedores Docker.
-3. Ejecutar las migraciones y seeders.
-4. Ejecutar las pruebas automatizadas.
-5. Desplegar la aplicación.
+- `docker-compose.yml`: Define servicios para Laravel, Nginx y MySQL.
+- `dockerfile.laravel`: Imagen personalizada para el backend.
+- `dockerfile.nginx`: Imagen personalizada para el servidor web.
+- `Jenkinsfile`: Define el pipeline de integración continua.
 
-## Contribuciones
+---
 
-Las contribuciones son bienvenidas. Por favor, sigue las buenas prácticas de desarrollo y realiza pull requests para proponer cambios.
+## 📌 Notas Adicionales
 
-## Licencia
+- Verifica que los puertos 8080 (Jenkins) y 80 (Nginx) estén disponibles.
+- El proyecto usa una base de datos MySQL expuesta en el contenedor `db`.
 
-Este proyecto está bajo la Licencia MIT. Consulta el archivo `LICENSE` para más detalles.
+---
+
+## 📜 Licencia
+
+Este proyecto se desarrolla con fines académicos. Todos los derechos reservados a los autores.
+

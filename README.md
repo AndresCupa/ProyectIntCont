@@ -1,66 +1,117 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Proyecto de Integración Continua
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Este proyecto es parte de un trabajo universitario que implementa una aplicación web utilizando Laravel, Docker y Jenkins para demostrar prácticas de integración continua y despliegue automatizado.
 
-## About Laravel
+## Requisitos Previos
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Antes de comenzar, asegúrate de tener instalados los siguientes componentes en tu sistema:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- [Docker](https://www.docker.com/get-started)
+- [Docker Compose](https://docs.docker.com/compose/install/)
+- [Git](https://git-scm.com/downloads)
+- [Composer](https://getcomposer.org/download/) (para gestionar dependencias de PHP)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Clonar el Repositorio
 
-## Learning Laravel
+```bash
+git clone https://github.com/AndresCupa/ProyectoIntCont.git
+cd ProyectoIntCont
+```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Configuración del Entorno
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+1. Copia el archivo de ejemplo `.env.example` y renómbralo a `.env`:
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+```bash
+cp .env.example .env
+```
 
-## Laravel Sponsors
+2. Genera la clave de la aplicación Laravel:
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+```bash
+php artisan key:generate
+```
 
-### Premium Partners
+## Construir y Levantar los Contenedores
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+El proyecto incluye un archivo `docker-compose.yml` y dos Dockerfiles (`dockerfile.laravel` y `dockerfile.nginx`) para configurar los servicios necesarios.
 
-## Contributing
+1. Construye y levanta los contenedores:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+docker-compose up -d --build
+```
 
-## Code of Conduct
+Esto iniciará los siguientes servicios:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+- **Laravel App**: Contenedor que ejecuta la aplicación Laravel.
+- **Nginx**: Servidor web que sirve la aplicación.
+- **MySQL**: Base de datos para la aplicación.
 
-## Security Vulnerabilities
+2. Verifica que los contenedores estén corriendo:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```bash
+docker ps
+```
 
-## License
+## Instalar Dependencias
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+1. Accede al contenedor de la aplicación Laravel:
+
+```bash
+docker exec -it laravel_app bash
+```
+
+2. Dentro del contenedor, instala las dependencias de PHP:
+
+```bash
+composer install
+```
+
+## Migraciones y Seeders
+
+1. Ejecuta las migraciones para crear las tablas en la base de datos:
+
+```bash
+php artisan migrate
+```
+
+2. (Opcional) Ejecuta los seeders para poblar la base de datos con datos de prueba:
+
+```bash
+php artisan db:seed
+```
+
+## Acceder a la Aplicación
+
+Una vez que los contenedores estén en funcionamiento y las dependencias instaladas, puedes acceder a la aplicación en tu navegador web en:
+
+```
+http://localhost
+```
+
+## Pruebas
+
+Para ejecutar las pruebas automatizadas, utiliza el siguiente comando dentro del contenedor de la aplicación:
+
+```bash
+php artisan test
+```
+
+## Desplegar con Jenkins
+
+Este proyecto está preparado para integrarse con Jenkins para automatizar el proceso de integración continua. Asegúrate de tener Jenkins instalado y configurado en tu entorno. Puedes crear un pipeline en Jenkins que realice las siguientes tareas:
+
+1. Clonar el repositorio.
+2. Construir los contenedores Docker.
+3. Ejecutar las migraciones y seeders.
+4. Ejecutar las pruebas automatizadas.
+5. Desplegar la aplicación.
+
+## Contribuciones
+
+Las contribuciones son bienvenidas. Por favor, sigue las buenas prácticas de desarrollo y realiza pull requests para proponer cambios.
+
+## Licencia
+
+Este proyecto está bajo la Licencia MIT. Consulta el archivo `LICENSE` para más detalles.

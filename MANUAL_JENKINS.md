@@ -1,4 +1,4 @@
-# Manual de Jenkins para Proyecto Laravel
+# Manual de Jenkins para MobileSync - Proyecto de Integración Continua
 
 Este manual describe cómo configurar Jenkins para automatizar la integración y entrega continua (CI/CD) de este proyecto.
 

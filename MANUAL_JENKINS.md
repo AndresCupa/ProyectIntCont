@@ -1,6 +1,6 @@
 # Manual de Jenkins para Proyecto Laravel
 
-Este manual describe cómo configurar Jenkins para automatizar la integración y entrega continua (CI/CD) del proyecto Laravel alojado en el repositorio [ProyectoIntCont](https://github.com/AndresCupa/ProyectoIntCont.git).
+Este manual describe cómo configurar Jenkins para automatizar la integración y entrega continua (CI/CD) de este proyecto.
 
 ## Requisitos Previos
 
@@ -15,13 +15,13 @@ Este manual describe cómo configurar Jenkins para automatizar la integración y
 1. Crear un `Dockerfile` que incluya PHP, Composer y extensiones necesarias de Laravel.
 2. Construir la imagen:
 
-,,,bash
+```bash
 docker build -t jenkins-laravel .
-,,,
+```
 
 ## Paso 2: Crear y correr el contenedor de Jenkins
 
-,,,bash
+```bash
 docker volume create jenkins_home
 docker volume create composer_cache
 
@@ -29,15 +29,15 @@ docker run -d -p 8080:8080 -p 50000:50000 \
   -v jenkins_home:/var/jenkins_home \
   -v composer_cache:/root/.composer \
   --name jenkins-laravel-container jenkins-laravel
-,,,
+```
 
 Accede a Jenkins en: http://localhost:8080
 
 Obtén la contraseña de administrador:
 
-,,,bash
+```bash
 docker exec -it jenkins-laravel-container cat /var/jenkins_home/secrets/initialAdminPassword
-,,,
+```
 
 ## Paso 3: Instalar y configurar Jenkins
 
@@ -59,7 +59,7 @@ docker exec -it jenkins-laravel-container cat /var/jenkins_home/secrets/initialA
 
 ### Ejemplo de Jenkinsfile:
 
-,,,groovy
+```groovy
 pipeline {
     agent any
     stages {
@@ -88,27 +88,27 @@ pipeline {
         }
     }
 }
-,,,
+```
 
 ## Paso 5: Configurar Ngrok para recibir webhooks
 
 1. Instalar ngrok en Windows:
 
-,,,bash
+```bash
 choco install ngrok
-,,,
+```
 
 2. Autenticar ngrok:
 
-,,,bash
+```bash
 ngrok config add-authtoken TU_TOKEN
-,,,
+```
 
 3. Exponer Jenkins:
 
-,,,bash
+```bash
 ngrok http 8080
-,,,
+```
 
 4. Copiar la URL generada (ej. https://xxxx.ngrok-free.app)
 
@@ -123,19 +123,19 @@ ngrok http 8080
 
 1. Realiza cambios en el código:
 
-,,,bash
+```bash
 git add .
 git commit -m "JenkinsPrueba"
 git push origin master
-,,,
+```
 
 2. Jenkins detectará el `push` mediante webhook.
 3. Ejecutará automáticamente el pipeline.
 4. Se validarán las pruebas:
 
-,,,bash
+```bash
 php artisan test
-,,,
+```
 
 ## Resultados
 

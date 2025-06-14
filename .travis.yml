@@ -1,0 +1,15 @@
+language: php
+
+php:
+  - 8.2
+
+services:
+  - mysql
+
+before_install:
+  - cp .env.example .env
+  - composer install
+  - php artisan key:generate
+
+script:
+  - php artisan test

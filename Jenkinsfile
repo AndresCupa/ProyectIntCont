@@ -30,5 +30,4 @@ pipeline {
         }
     }
 }
-// prueba de Jenkins
-// se ejecuto correctaente
+

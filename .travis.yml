@@ -6,7 +6,7 @@ php:
 services:
   - mysql
 
-before_script:
+before_install:
   - cp .env.example .env
   - composer install
   - php artisan key:generate

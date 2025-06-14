@@ -1,16 +1,29 @@
 language: php
 
 php:
+  - 7.4
+  - 8.0
   - 8.1
-
-services:
-  - mysql
-
-before_install:
-  - cp .env.example .env
+  - 8.2
+  
+install:
   - composer install
-  - php artisan key:generate
-  - php artisan migrate --force
 
 script:
-  - php artisan test
+  - ./vendor/bin/phpunit
+# language: php
+
+# php:
+#   - 8.1
+
+# services:
+#   - mysql
+
+# before_install:
+#   - cp .env.example .env
+#   - composer install
+#   - php artisan key:generate
+#   - php artisan migrate --force
+
+# script:
+#   - php artisan test

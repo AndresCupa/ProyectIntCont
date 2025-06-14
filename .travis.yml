@@ -1,19 +1,19 @@
 language: php
 php:
+  - 8.0
   - 8.1
   - 8.2
-
-os: windows  # Especifica que usas Windows
 
 services:
   - mysql
 
-before_install:
-  - choco install php --version=8.1.0 -y  # Instala PHP (opcional, Travis ya lo incluye)
-  - mysql -e "CREATE DATABASE IF NOT EXISTS laravel_test;"
-
 install:
   - composer install --no-interaction --prefer-dist
+
+before_script:
+  - cp .env.example .env
+  - php artisan key:generate
+  - php artisan migrate --seed
 
 script:
   - vendor/bin/phpunit

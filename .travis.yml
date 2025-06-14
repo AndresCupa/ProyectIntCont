@@ -1,12 +1,12 @@
 language: php
 
 php:
-  - 8.2
+  - 8.1
 
 services:
   - mysql
 
-before_script:
+before_install:
   - cp .env.example .env
   - composer install
   - php artisan key:generate
@@ -14,4 +14,3 @@ before_script:
 
 script:
   - php artisan test
-# Prueba

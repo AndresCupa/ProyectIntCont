@@ -16,4 +16,4 @@ install:
   - composer install --no-interaction --prefer-dist
 
 script:
-  - vendor/bin/phpunitgit add .
+  - vendor/bin/phpunit

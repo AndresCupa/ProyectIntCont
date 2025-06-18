@@ -42,9 +42,6 @@ jobs:
       - name: Generate application key
         run: php artisan key:generate
 
-      - name: Run migrations
-        run: php artisan migrate --force
-
       - name: Run PHPUnit tests
         run: |
           ./vendor/bin/phpunit --coverage-clover=coverage.xml
@@ -55,3 +52,4 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: coverage.xml
           fail_ci_if_error: true
+#prueba

@@ -25,7 +25,7 @@ jobs:
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress --no-suggest
 
-    - name: Copy .env and generate key
+    - name: Prepare .env
       run: |
         cp .env.example .env
         php artisan key:generate
@@ -36,9 +36,9 @@ jobs:
     - name: Run tests and generate coverage
       run: php artisan test --coverage-clover=coverage.xml
 
-    - name: Upload coverage report to Codecov
+    - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v5
       with:
-        token: fa54acef-4fd3-4cb5-a53f-0629aed4ec8c
+        token: ${{ secrets.CODECOV_TOKEN }}
         files: coverage.xml
         fail_ci_if_error: true

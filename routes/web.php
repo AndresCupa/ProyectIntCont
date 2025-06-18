@@ -44,6 +44,13 @@ Route::middleware(['auth'])->group(function () {
 
     Route::delete('principal.users/{user}',[App\Http\Controllers\UserController::class, 'destroy'])->name('principal.users.destroy');
     //->middleware('permission:principal.users.destroy');
+    // Sentry
+    Route::get('/sentry-test', [App\Http\Controllers\SentryTestController::class, 'test'])->name('sentry.test');
 
 });
+
+// Ruta de prueba para Sentry
+// Route::get('/debug-sentry', function () {
+//     throw new Exception('Este es un error de prueba enviado a Sentry.');
+// });
 

@@ -1,21 +1,22 @@
 language: php
+
 php:
-  - 8.0
-  - 8.1
   - 8.2
 
 services:
   - mysql
 
-install:
-  - composer install --no-interaction --prefer-dist
-
-before_script:
+before_install:
   - cp .env.example .env
+  - composer install
   - php artisan key:generate
-  - php artisan migrate --seed
+  - php artisan migrate --force
 
 script:
-  - vendor/bin/phpunit
+  - php artisan test --coverage-clover=coverage.xml
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
+
 
   # prueba

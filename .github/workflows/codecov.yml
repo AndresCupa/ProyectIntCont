@@ -1,18 +1,32 @@
-name: Code Coverage
+name: Run Laravel Tests and Upload to Codecov
 
 on:
   push:
-    branches:
-      - master
+    branches: [ master ]
   pull_request:
+    branches: [ master ]
 
 jobs:
-  run-tests:
+  test:
     runs-on: ubuntu-latest
 
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: laravel
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v3
 
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
@@ -20,12 +34,18 @@ jobs:
           php-version: '8.2'
 
       - name: Install dependencies
-        run: |
-          cp .env.example .env
-          composer install
-          php artisan key:generate
+        run: composer install --prefer-dist --no-progress
 
-      - name: Run tests and collect coverage
+      - name: Copy .env
+        run: cp .env.example .env
+
+      - name: Generate application key
+        run: php artisan key:generate
+
+      - name: Run migrations
+        run: php artisan migrate --force
+
+      - name: Run PHPUnit tests
         run: |
           ./vendor/bin/phpunit --coverage-clover=coverage.xml
 
@@ -34,5 +54,4 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: coverage.xml
-          flags: unittests
-          name: codecov-coverage
+          fail_ci_if_error: true
